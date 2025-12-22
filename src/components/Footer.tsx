@@ -245,7 +245,7 @@ export default function Footer() {
               </div>
               <div className="text-center">
                 <p className="text-gray-100 text-xs">
-                  Developed By Sanskriti Khanal . All Right Reserved.
+                  Developed By Sanskriti Khanal
                 </p>
               </div>
             </div>

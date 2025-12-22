@@ -80,27 +80,32 @@ export default function Footer() {
             <h3 className="text-lg font-semibold">Study Destinations</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/study-abroad/usa" className="text-white hover:text-yellow-400 transition-colors duration-200" style={{color: 'white !important'}}>
+                <Link href="institution" className="text-white hover:text-yellow-400 transition-colors duration-200" style={{color: 'white !important'}}>
+                  Study in India
+                </Link>
+              </li>
+              <li>
+                <Link href="institution" className="text-white hover:text-yellow-400 transition-colors duration-200" style={{color: 'white !important'}}>
                   Study in USA
                 </Link>
               </li>
               <li>
-                <Link href="/study-abroad/canada" className="text-white hover:text-yellow-400 transition-colors duration-200" style={{color: 'white !important'}}>
+                <Link href="institution" className="text-white hover:text-yellow-400 transition-colors duration-200" style={{color: 'white !important'}}>
                   Study in Canada
                 </Link>
               </li>
               <li>
-                <Link href="/study-abroad/uk" className="text-white hover:text-yellow-400 transition-colors duration-200" style={{color: 'white !important'}}>
+                <Link href="institutionk" className="text-white hover:text-yellow-400 transition-colors duration-200" style={{color: 'white !important'}}>
                   Study in UK
                 </Link>
               </li>
               <li>
-                <Link href="/study-abroad/australia" className="text-white hover:text-yellow-400 transition-colors duration-200" style={{color: 'white !important'}}>
+                <Link href="institution" className="text-white hover:text-yellow-400 transition-colors duration-200" style={{color: 'white !important'}}>
                   Study in Australia
                 </Link>
               </li>
               <li>
-                <Link href="/study-abroad/newzealand" className="text-white hover:text-yellow-400 transition-colors duration-200" style={{color: 'white !important'}}>
+                <Link href="institution" className="text-white hover:text-yellow-400 transition-colors duration-200" style={{color: 'white !important'}}>
                   Study in New Zealand
                 </Link>
               </li>
@@ -114,7 +119,7 @@ export default function Footer() {
               <div className="flex items-start space-x-3">
                 <span className="text-cta-red mt-1">📞</span>
                 <div>
-                  <p className="text-white text-sm" style={{color: 'white !important'}}>Kathmandu: 9816969646</p>
+
                   <p className="text-white text-sm" style={{color: 'white !important'}}>Jhapa: 9804904835</p>
                 </div>
               </div>
@@ -124,7 +129,7 @@ export default function Footer() {
               </div>
               <div className="flex items-start space-x-3">
                 <span className="text-cta-red mt-1">📍</span>
-                <p className="text-white text-sm" style={{color: 'white !important'}}>Kathmandu, Nepal</p>
+                <p className="text-white text-sm" style={{color: 'white !important'}}>Kakarvitta, Nepal</p>
               </div>
             </div>
           </div>
@@ -148,7 +153,7 @@ export default function Footer() {
             </div>
             <div className="text-center">
               <p className="text-white text-xs" style={{color: 'white !important'}}>
-                Developed By Sanskriti Khanal . All Right Reserved.
+                Developed By Sanskriti Khanal
               </p>
             </div>
           </div>

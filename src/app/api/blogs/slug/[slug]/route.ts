@@ -7,9 +7,9 @@ export async function GET(
 ) {
   try {
     const { slug } = await params;
-    const blog = blogsStore.find(b => b.slug === slug && b.status === 'published');
+    const blog = await blogsStore.findBySlug(slug);
     
-    if (!blog) {
+    if (!blog || blog.status !== 'published') {
       return NextResponse.json({ error: 'Blog not found' }, { status: 404 });
     }
 

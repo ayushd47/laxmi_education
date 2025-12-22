@@ -8,28 +8,14 @@ export async function GET(request: NextRequest) {
     const category = searchParams.get('category');
     const search = searchParams.get('search');
 
-    let filteredBlogs = [...blogsStore];
+    // Get filtered blogs from database
+    let filteredBlogs = await blogsStore.filter({
+      status: status || undefined,
+      category: category || undefined,
+      search: search || undefined,
+    });
 
-    // Filter by status
-    if (status && status !== 'all') {
-      filteredBlogs = filteredBlogs.filter(blog => blog.status === status);
-    }
-
-    // Filter by category
-    if (category && category !== 'all') {
-      filteredBlogs = filteredBlogs.filter(blog => blog.category === category);
-    }
-
-    // Search filter
-    if (search) {
-      const searchLower = search.toLowerCase();
-      filteredBlogs = filteredBlogs.filter(blog =>
-        blog.title.toLowerCase().includes(searchLower) ||
-        blog.excerpt.toLowerCase().includes(searchLower) ||
-        blog.author.toLowerCase().includes(searchLower) ||
-        blog.tags.some(tag => tag.toLowerCase().includes(searchLower))
-      );
-    }
+    console.log('GET /api/blogs - Found blogs:', filteredBlogs.length);
 
     return NextResponse.json(filteredBlogs);
   } catch (error) {
@@ -53,8 +39,8 @@ export async function POST(request: NextRequest) {
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)/g, '');
 
-    const newBlog: BlogData = {
-      id: Date.now().toString(),
+    // Create blog data (without id, createdAt, updatedAt - these are handled by DB)
+    const blogData = {
       title: body.title,
       slug,
       excerpt: body.excerpt || body.content.substring(0, 200) + '...',
@@ -66,8 +52,6 @@ export async function POST(request: NextRequest) {
       status: body.status || 'draft',
       featuredImage: body.featuredImage || '/blog/default.jpg',
       publishedAt: body.status === 'published' ? new Date().toISOString().split('T')[0] : undefined,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
       views: 0,
       likes: 0,
       comments: 0,
@@ -76,10 +60,9 @@ export async function POST(request: NextRequest) {
       seoKeywords: body.seoKeywords || []
     };
 
-    blogsStore.push(newBlog);
+    const newBlog = await blogsStore.create(blogData);
     
     console.log('POST /api/blogs - Created blog with ID:', newBlog.id);
-    console.log('POST /api/blogs - Store length after create:', blogsStore.length);
 
     return NextResponse.json(newBlog, { status: 201 });
   } catch (error) {

@@ -137,8 +137,7 @@ export default function ContactUs() {
                   </div>
                   <div className="ml-4">
                     <h3 className="text-lg font-semibold text-navbar-blue">Email Us</h3>
-                    <p className="text-gray-600">info@laxmieducation.com</p>
-                    <p className="text-gray-600">support@laxmieducation.com</p>
+                    <p className="text-gray-600">collegeadmissionnp@gmail.com</p>
                   </div>
                 </div>
 
@@ -150,8 +149,8 @@ export default function ContactUs() {
                   </div>
                   <div className="ml-4">
                     <h3 className="text-lg font-semibold text-navbar-blue">Call Us</h3>
-                    <p className="text-gray-600">+1 (555) 123-4567</p>
-                    <p className="text-gray-600">+1 (555) 987-6543</p>
+                    <p className="text-gray-600">023566863</p>
+                    <p className="text-gray-600">9823727770</p>
                   </div>
                 </div>
 
@@ -164,9 +163,8 @@ export default function ContactUs() {
                   <div className="ml-4">
                     <h3 className="text-lg font-semibold text-navbar-blue">Visit Us</h3>
                     <p className="text-gray-600">
-                      123 Education Street<br />
-                      Learning City, LC 12345<br />
-                      United States
+                      Kakarvitta, Jhapa<br />
+                      Nepal
                     </p>
                   </div>
                 </div>
@@ -201,37 +199,22 @@ export default function ContactUs() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {[
-              {
-                question: "How much does a consultation cost?",
-                answer: "Our initial consultation is completely free. We offer a comprehensive assessment of your profile and goals at no cost."
-              },
-              {
-                question: "How long does the application process take?",
-                answer: "The timeline varies depending on the country and university, but typically takes 6-12 months from start to finish."
-              },
-              {
-                question: "Do you help with visa applications?",
-                answer: "Yes, we provide comprehensive visa assistance including document preparation, application guidance, and interview preparation."
-              },
-              {
-                question: "What test scores do I need for universities?",
-                answer: "Requirements vary by university and program, but generally IELTS 6.5-7.0, TOEFL 90-100, GRE 310+, or GMAT 650+ are competitive scores."
-              },
-              {
-                question: "Do you offer online classes?",
-                answer: "Yes, we offer both online and in-person classes for test preparation. All our courses are designed to be flexible and accessible."
-              },
-              {
-                question: "What if I don't get accepted to my chosen universities?",
-                answer: "We work with you to create a backup plan and help you apply to alternative universities that match your profile and goals."
-              }
-            ].map((faq, index) => (
-              <div key={index} className="bg-light-gray p-6 rounded-lg">
-                <h3 className="text-lg font-semibold text-navbar-blue mb-3">{faq.question}</h3>
-                <p className="text-gray-600">{faq.answer}</p>
-              </div>
-            ))}
+            <div className="bg-light-gray p-6 rounded-lg">
+              <h3 className="text-lg font-semibold text-navbar-blue mb-3">
+                How can I book a consultation?
+              </h3>
+              <p className="text-gray-600">
+                You can call us directly, email us, or fill out the contact form above. Our team will get back to you as soon as possible.
+              </p>
+            </div>
+            <div className="bg-light-gray p-6 rounded-lg">
+              <h3 className="text-lg font-semibold text-navbar-blue mb-3">
+                Where is your office located?
+              </h3>
+              <p className="text-gray-600">
+                Our office is located in Kakarvitta, Jhapa, Nepal. You are welcome to visit us during office hours.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -247,10 +230,10 @@ export default function ContactUs() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="tel:+15551234567"
+              href="tel:023566863"
               className="bg-cta-red hover:bg-red-600 text-white font-bold py-4 px-8 rounded-lg text-lg transition-colors duration-200"
             >
-              Call Now: (555) 123-4567
+              Call Now: 023566863 / 9823727770
             </a>
             <a
               href="mailto:info@laxmieducation.com"

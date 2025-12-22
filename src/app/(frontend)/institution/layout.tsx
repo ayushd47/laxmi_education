@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import { getBaseUrl } from "@/lib/metadata";
+
+const baseUrl = getBaseUrl();
 
 export const metadata: Metadata = {
   title: "Top Universities & Colleges in India | Laxmi Education",
@@ -12,18 +15,18 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://laxmieducation.com'),
+  metadataBase: new URL(baseUrl),
   alternates: {
     canonical: '/institution',
   },
   openGraph: {
     title: "Top Universities & Colleges in India | Laxmi Education",
     description: "Discover the best universities, colleges, and research institutes in India. Find detailed information about IITs, IIMs, AIIMS, and other premier educational institutions.",
-    url: 'https://laxmieducation.com/institution',
+    url: `${baseUrl}/institution`,
     siteName: 'Laxmi Education',
     images: [
       {
-        url: '/assets/og-institution.jpg',
+        url: '/assets/logo.png', // Using logo as fallback until og-institution.jpg is created
         width: 1200,
         height: 630,
         alt: 'Top Universities & Colleges in India - Laxmi Education',
@@ -36,7 +39,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: "Top Universities & Colleges in India | Laxmi Education",
     description: "Discover the best universities, colleges, and research institutes in India. Find detailed information about IITs, IIMs, AIIMS, and other premier educational institutions.",
-    images: ['/assets/og-institution.jpg'],
+    images: ['/assets/logo.png'], // Using logo as fallback until og-institution.jpg is created
   },
   robots: {
     index: true,

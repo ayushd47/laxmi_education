@@ -1,47 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-
-// Mock data - in a real application, this would come from a database
-let settings = {
-  site: {
-    siteName: 'Laxmi Education',
-    siteDescription: 'Your gateway to global education opportunities',
-    siteUrl: 'https://laxmieducation.com',
-    contactEmail: 'info@laxmieducation.com',
-    contactPhone: '+1 (555) 123-4567',
-    address: '123 Education Street, Learning City, LC 12345',
-    socialMedia: {
-      facebook: 'https://facebook.com/laxmieducation',
-      twitter: 'https://twitter.com/laxmieducation',
-      linkedin: 'https://linkedin.com/company/laxmieducation',
-      instagram: 'https://instagram.com/laxmieducation'
-    }
-  },
-  admin: {
-    adminEmail: 'admin@laxmieducation.com',
-    adminName: 'Admin User',
-    notifications: {
-      emailNotifications: true,
-      newApplicationAlerts: true,
-      blogPublishAlerts: true,
-      systemAlerts: true
-    },
-    security: {
-      twoFactorAuth: false,
-      sessionTimeout: 30,
-      passwordPolicy: 'strong'
-    }
-  },
-  appearance: {
-    primaryColor: '#1e40af',
-    secondaryColor: '#dc2626',
-    logoUrl: '/assets/logo.png',
-    faviconUrl: '/favicon.ico',
-    theme: 'light'
-  }
-};
+import { getSettings, updateSettings, resetSettingsSection, createBackup, restoreFromBackup } from './data';
 
 export async function GET(request: NextRequest) {
   try {
+    const settings = await getSettings();
     return NextResponse.json({
       success: true,
       data: settings
@@ -67,24 +29,22 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    // Update the specific section
-    if (section === 'site') {
-      settings.site = { ...settings.site, ...data };
-    } else if (section === 'admin') {
-      settings.admin = { ...settings.admin, ...data };
-    } else if (section === 'appearance') {
-      settings.appearance = { ...settings.appearance, ...data };
-    } else {
+    if (!['site', 'admin', 'appearance'].includes(section)) {
       return NextResponse.json(
         { success: false, error: 'Invalid section' },
         { status: 400 }
       );
     }
 
+    const updatedSettings = await updateSettings(
+      section as 'site' | 'admin' | 'appearance',
+      data
+    );
+
     return NextResponse.json({
       success: true,
       message: `${section} settings updated successfully`,
-      data: settings
+      data: updatedSettings
     });
   } catch (error) {
     console.error('Error updating settings:', error);
@@ -103,61 +63,26 @@ export async function POST(request: NextRequest) {
     if (action === 'reset') {
       const { section } = body;
       
-      // Reset to default values
-      if (section === 'site') {
-        settings.site = {
-          siteName: 'Laxmi Education',
-          siteDescription: 'Your gateway to global education opportunities',
-          siteUrl: 'https://laxmieducation.com',
-          contactEmail: 'info@laxmieducation.com',
-          contactPhone: '+1 (555) 123-4567',
-          address: '123 Education Street, Learning City, LC 12345',
-          socialMedia: {
-            facebook: 'https://facebook.com/laxmieducation',
-            twitter: 'https://twitter.com/laxmieducation',
-            linkedin: 'https://linkedin.com/company/laxmieducation',
-            instagram: 'https://instagram.com/laxmieducation'
-          }
-        };
-      } else if (section === 'admin') {
-        settings.admin = {
-          adminEmail: 'admin@laxmieducation.com',
-          adminName: 'Admin User',
-          notifications: {
-            emailNotifications: true,
-            newApplicationAlerts: true,
-            blogPublishAlerts: true,
-            systemAlerts: true
-          },
-          security: {
-            twoFactorAuth: false,
-            sessionTimeout: 30,
-            passwordPolicy: 'strong'
-          }
-        };
-      } else if (section === 'appearance') {
-        settings.appearance = {
-          primaryColor: '#1e40af',
-          secondaryColor: '#dc2626',
-          logoUrl: '/assets/logo.png',
-          faviconUrl: '/favicon.ico',
-          theme: 'light'
-        };
+      if (!['site', 'admin', 'appearance'].includes(section)) {
+        return NextResponse.json(
+          { success: false, error: 'Invalid section' },
+          { status: 400 }
+        );
       }
+
+      const resetSettings = await resetSettingsSection(
+        section as 'site' | 'admin' | 'appearance'
+      );
 
       return NextResponse.json({
         success: true,
         message: `${section} settings reset to defaults`,
-        data: settings
+        data: resetSettings
       });
     }
 
     if (action === 'backup') {
-      // Create a backup of current settings
-      const backup = {
-        timestamp: new Date().toISOString(),
-        settings: { ...settings }
-      };
+      const backup = await createBackup();
 
       return NextResponse.json({
         success: true,
@@ -176,12 +101,12 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      settings = { ...backupData };
+      const restoredSettings = await restoreFromBackup(backupData);
       
       return NextResponse.json({
         success: true,
         message: 'Settings restored from backup',
-        data: settings
+        data: restoredSettings
       });
     }
 

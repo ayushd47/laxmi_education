@@ -7,7 +7,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const blog = blogsStore.find(b => b.id === id);
+    const blog = await blogsStore.findById(id);
     
     if (!blog) {
       return NextResponse.json({ error: 'Blog not found' }, { status: 404 });
@@ -27,24 +27,25 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const blogIndex = blogsStore.findIndex(b => b.id === id);
+    const existingBlog = await blogsStore.findById(id);
     
-    if (blogIndex === -1) {
+    if (!existingBlog) {
       return NextResponse.json({ error: 'Blog not found' }, { status: 404 });
     }
 
-    // Update blog
-    const updatedBlog: BlogData = {
-      ...blogsStore[blogIndex],
+    // Update blog data
+    const updateData: Partial<BlogData> = {
       ...body,
-      id: id,
-      updatedAt: new Date().toISOString(),
-      publishedAt: body.status === 'published' && !blogsStore[blogIndex].publishedAt 
+      publishedAt: body.status === 'published' && !existingBlog.publishedAt 
         ? new Date().toISOString().split('T')[0] 
-        : blogsStore[blogIndex].publishedAt
+        : existingBlog.publishedAt
     };
 
-    blogsStore[blogIndex] = updatedBlog;
+    const updatedBlog = await blogsStore.update(id, updateData);
+
+    if (!updatedBlog) {
+      return NextResponse.json({ error: 'Failed to update blog' }, { status: 500 });
+    }
 
     return NextResponse.json(updatedBlog);
   } catch (error) {
@@ -59,13 +60,17 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const blogIndex = blogsStore.findIndex(b => b.id === id);
+    const existingBlog = await blogsStore.findById(id);
     
-    if (blogIndex === -1) {
+    if (!existingBlog) {
       return NextResponse.json({ error: 'Blog not found' }, { status: 404 });
     }
 
-    blogsStore.splice(blogIndex, 1);
+    const deleted = await blogsStore.delete(id);
+
+    if (!deleted) {
+      return NextResponse.json({ error: 'Failed to delete blog' }, { status: 500 });
+    }
 
     return NextResponse.json({ message: 'Blog deleted successfully' });
   } catch (error) {

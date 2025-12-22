@@ -3,12 +3,12 @@ import { enquiriesStore } from '../data';
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const body = await request.json();
     const { status } = body;
-    const { id } = params;
+    const { id } = await params;
 
     if (!status) {
       return NextResponse.json({ error: 'Status is required' }, { status: 400 });
@@ -20,23 +20,25 @@ export async function PATCH(
     }
 
     // Find and update the enquiry
-    const enquiryIndex = enquiriesStore.findIndex(e => e.id === id);
+    const existingEnquiry = await enquiriesStore.findById(id);
     
-    if (enquiryIndex === -1) {
+    if (!existingEnquiry) {
       return NextResponse.json({ error: 'Enquiry not found' }, { status: 404 });
     }
 
     // Update the enquiry
-    enquiriesStore[enquiryIndex] = {
-      ...enquiriesStore[enquiryIndex],
+    const updatedEnquiry = await enquiriesStore.update(id, {
       status: status as 'new' | 'read' | 'contacted' | 'resolved',
-      updatedAt: new Date().toISOString(),
-    };
+    });
+
+    if (!updatedEnquiry) {
+      return NextResponse.json({ error: 'Failed to update enquiry' }, { status: 500 });
+    }
     
     return NextResponse.json({
       success: true,
       message: 'Enquiry status updated',
-      data: enquiriesStore[enquiryIndex]
+      data: updatedEnquiry
     });
   } catch (error) {
     console.error('Error updating enquiry:', error);

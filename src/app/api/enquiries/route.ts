@@ -8,30 +8,14 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get('search');
     const sort = searchParams.get('sort') || 'newest';
 
-    let filteredEnquiries = [...enquiriesStore];
+    // Get filtered enquiries from database
+    let filteredEnquiries = await enquiriesStore.filter({
+      status: status || undefined,
+      search: search || undefined,
+      sort: sort || 'newest',
+    });
 
-    // Filter by status
-    if (status && status !== 'all') {
-      filteredEnquiries = filteredEnquiries.filter(enquiry => enquiry.status === status);
-    }
-
-    // Search filter
-    if (search) {
-      const searchLower = search.toLowerCase();
-      filteredEnquiries = filteredEnquiries.filter(enquiry =>
-        enquiry.name.toLowerCase().includes(searchLower) ||
-        enquiry.email.toLowerCase().includes(searchLower) ||
-        enquiry.phone?.toLowerCase().includes(searchLower) ||
-        enquiry.message?.toLowerCase().includes(searchLower)
-      );
-    }
-
-    // Sort enquiries
-    if (sort === 'newest') {
-      filteredEnquiries.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-    } else if (sort === 'oldest') {
-      filteredEnquiries.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-    }
+    console.log('GET /api/enquiries - Found enquiries:', filteredEnquiries.length);
 
     return NextResponse.json(filteredEnquiries);
   } catch (error) {
@@ -49,8 +33,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Name and email are required' }, { status: 400 });
     }
 
-    const newEnquiry: EnquiryData = {
-      id: Date.now().toString(),
+    // Create enquiry data (without id, createdAt, updatedAt - these are handled by DB)
+    const enquiryData = {
       name: body.name,
       email: body.email,
       phone: body.phone || '',
@@ -58,11 +42,9 @@ export async function POST(request: NextRequest) {
       nearestOffice: body.nearestOffice || 'Kathmandu',
       message: body.message || '',
       status: 'new' as const, // new, read, contacted, resolved
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
     };
 
-    enquiriesStore.push(newEnquiry);
+    const newEnquiry = await enquiriesStore.create(enquiryData);
 
     return NextResponse.json(newEnquiry, { status: 201 });
   } catch (error) {

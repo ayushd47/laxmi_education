@@ -9,3 +9,8 @@ services:
     envVars:
       - key: NODE_VERSION
         value: 20
+      # IMPORTANT: Add MONGODB_URI or DATABASE_URL environment variable in Render dashboard
+      # Go to your service > Environment tab > Add Environment Variable
+      # Key: MONGODB_URI
+      # Value: Your MongoDB connection string (e.g., mongodb+srv://user:pass@cluster.mongodb.net/dbname)
+      # Also add: JWT_SECRET, EMAIL_USER, EMAIL_PASSWORD, EMAIL_FROM, NEXT_PUBLIC_BASE_URL

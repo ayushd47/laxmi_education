@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { getBaseUrl } from "@/lib/metadata";
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
 });
+
+const baseUrl = getBaseUrl();
 
 export const metadata: Metadata = {
   title: "Laxmi Education - Your Gateway to International Education",
@@ -19,18 +22,18 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://laxmieducation.com'),
+  metadataBase: new URL(baseUrl),
   alternates: {
     canonical: '/',
   },
   openGraph: {
     title: "Laxmi Education - Your Gateway to International Education",
     description: "Expert guidance for study abroad programs, test preparation, and university applications.",
-    url: 'https://laxmieducation.com',
+    url: baseUrl,
     siteName: 'Laxmi Education',
     images: [
       {
-        url: '/assets/og-image.jpg',
+        url: '/assets/logo.png', // Using logo as fallback until og-image.jpg is created
         width: 1200,
         height: 630,
         alt: 'Laxmi Education - International Education Services',
@@ -43,7 +46,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: "Laxmi Education - Your Gateway to International Education",
     description: "Expert guidance for study abroad programs, test preparation, and university applications.",
-    images: ['/assets/og-image.jpg'],
+    images: ['/assets/logo.png'], // Using logo as fallback until og-image.jpg is created
   },
   robots: {
     index: true,
@@ -74,8 +77,8 @@ export default function RootLayout({
               "@type": "EducationalOrganization",
               "name": "Laxmi Education",
               "description": "Expert guidance for study abroad programs, test preparation, and university applications",
-              "url": "https://laxmieducation.com",
-              "logo": "https://laxmieducation.com/assets/logo.png",
+              "url": baseUrl,
+              "logo": `${baseUrl}/assets/logo.png`,
               "contactPoint": {
                 "@type": "ContactPoint",
                 "telephone": "+977-1-5333088",
@@ -122,13 +125,13 @@ export default function RootLayout({
               "provider": {
                 "@type": "EducationalOrganization",
                 "name": "Laxmi Education",
-                "url": "https://laxmieducation.com"
+                "url": baseUrl
               },
-              "serviceType": "Educational Consulting",
+              "serviceType": "EducationalConsulting",
               "areaServed": "Nepal",
               "availableChannel": {
                 "@type": "ServiceChannel",
-                "serviceUrl": "https://laxmieducation.com",
+                "serviceUrl": baseUrl,
                 "serviceSmsNumber": "+977-1-5333088",
                 "servicePhone": "+977-1-5333088"
               },
