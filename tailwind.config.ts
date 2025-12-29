@@ -15,6 +15,7 @@ const config: Config = {
         'royal-blue': '#0057A5',
         'dark-navy': '#002147',
         'brand-white': '#FFFFFF',
+        'brand-orange': '#E79B47',
 
         // Backwards-compat (old tokens mapped to new)
         'highlight-yellow': '#FFF200',

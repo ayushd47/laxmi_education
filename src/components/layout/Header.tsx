@@ -3,12 +3,21 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const isActive = (path: string) => {
+    if (path === '/') {
+      return pathname === '/';
+    }
+    return pathname?.startsWith(path);
   };
 
   return (
@@ -36,31 +45,66 @@ export default function Header() {
           <nav className="hidden md:flex space-x-8">
             <Link
               href="/"
-              className="text-gray-700 hover:text-cta-red font-medium transition-colors duration-200"
+              className={`font-medium transition-colors duration-200 pb-1 ${
+                isActive('/')
+                  ? 'text-gray-900 border-b-2'
+                  : 'text-gray-700'
+              }`}
+              style={isActive('/') ? { borderColor: '#E79B47' } : {}}
+              onMouseEnter={(e) => !isActive('/') && (e.currentTarget.style.color = '#E79B47')}
+              onMouseLeave={(e) => !isActive('/') && (e.currentTarget.style.color = '')}
             >
               Home
             </Link>
             <Link
               href="/about-us"
-              className="text-gray-700 hover:text-cta-red font-medium transition-colors duration-200"
+              className={`font-medium transition-colors duration-200 pb-1 ${
+                isActive('/about-us')
+                  ? 'text-gray-900 border-b-2'
+                  : 'text-gray-700'
+              }`}
+              style={isActive('/about-us') ? { borderColor: '#E79B47' } : {}}
+              onMouseEnter={(e) => !isActive('/about-us') && (e.currentTarget.style.color = '#E79B47')}
+              onMouseLeave={(e) => !isActive('/about-us') && (e.currentTarget.style.color = '')}
             >
               About Us
             </Link>
             <Link
               href="/institution"
-              className="text-gray-700 hover:text-cta-red font-medium transition-colors duration-200"
+              className={`font-medium transition-colors duration-200 pb-1 ${
+                isActive('/institution')
+                  ? 'text-gray-900 border-b-2'
+                  : 'text-gray-700'
+              }`}
+              style={isActive('/institution') ? { borderColor: '#E79B47' } : {}}
+              onMouseEnter={(e) => !isActive('/institution') && (e.currentTarget.style.color = '#E79B47')}
+              onMouseLeave={(e) => !isActive('/institution') && (e.currentTarget.style.color = '')}
             >
               Institutions
             </Link>
             <Link
               href="/blog"
-              className="text-gray-700 hover:text-cta-red font-medium transition-colors duration-200"
+              className={`font-medium transition-colors duration-200 pb-1 ${
+                isActive('/blog')
+                  ? 'text-gray-900 border-b-2'
+                  : 'text-gray-700'
+              }`}
+              style={isActive('/blog') ? { borderColor: '#E79B47' } : {}}
+              onMouseEnter={(e) => !isActive('/blog') && (e.currentTarget.style.color = '#E79B47')}
+              onMouseLeave={(e) => !isActive('/blog') && (e.currentTarget.style.color = '')}
             >
               Blog
             </Link>
             <Link
               href="/contact-us"
-              className="text-gray-700 hover:text-cta-red font-medium transition-colors duration-200"
+              className={`font-medium transition-colors duration-200 pb-1 ${
+                isActive('/contact-us')
+                  ? 'text-gray-900 border-b-2'
+                  : 'text-gray-700'
+              }`}
+              style={isActive('/contact-us') ? { borderColor: '#E79B47' } : {}}
+              onMouseEnter={(e) => !isActive('/contact-us') && (e.currentTarget.style.color = '#E79B47')}
+              onMouseLeave={(e) => !isActive('/contact-us') && (e.currentTarget.style.color = '')}
             >
               Contact
             </Link>
@@ -70,9 +114,12 @@ export default function Header() {
           <div className="hidden md:flex">
             <Link
               href="/contact-us"
-              className="bg-cta-red hover:bg-red-600 text-white font-semibold px-6 py-2 rounded-lg transition-colors duration-200"
+              className="text-white font-semibold px-6 py-2 rounded-lg transition-colors duration-200"
+              style={{ backgroundColor: '#E79B47' }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#d68935'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#E79B47'}
             >
-              Get Consultation
+              Get Free Consultation
             </Link>
           </div>
 
@@ -151,10 +198,13 @@ export default function Header() {
               <div className="pt-4">
                 <Link
                   href="/contact-us"
-                  className="block w-full bg-cta-red hover:bg-red-600 text-white font-semibold px-6 py-3 rounded-lg text-center transition-colors duration-200"
+                  className="block w-full text-white font-semibold px-6 py-3 rounded-lg text-center transition-colors duration-200"
+                  style={{ backgroundColor: '#E79B47' }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#d68935'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#E79B47'}
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  Get Consultation
+                  Get Free Consultation
                 </Link>
               </div>
             </div>

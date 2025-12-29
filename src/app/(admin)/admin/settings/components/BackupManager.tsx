@@ -111,8 +111,8 @@ export default function BackupManager({
               </div>
             </div>
             
-            <div className="flex items-center gap-3 p-3 bg-purple-50 rounded-lg">
-              <Clock className="h-5 w-5 text-purple-600" />
+            <div className="flex items-center gap-3 p-3 bg-royal-blue/5 rounded-lg">
+              <Clock className="h-5 w-5 text-royal-blue" />
               <div>
                 <p className="text-sm font-medium text-gray-900">Next Backup</p>
                 <p className="text-sm text-gray-600">{backupInfo.nextBackup}</p>

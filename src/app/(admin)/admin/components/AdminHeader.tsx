@@ -1,17 +1,54 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search, Bell, Settings, User, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAuthStore } from '@/store/useAuthStore';
 
+interface Notification {
+  id: string;
+  title: string;
+  message: string;
+  type: 'application' | 'score' | 'document' | 'other';
+  createdAt: string;
+  read: boolean;
+}
+
 export default function AdminHeader() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [isLoadingNotifications, setIsLoadingNotifications] = useState(false);
   const { user, logout } = useAuthStore();
   const router = useRouter();
+
+  // Fetch notifications
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        setIsLoadingNotifications(true);
+        // TODO: Replace with actual API endpoint when available
+        // const response = await fetch('/api/notifications');
+        // if (response.ok) {
+        //   const data = await response.json();
+        //   setNotifications(data);
+        // }
+        // For now, set empty array
+        setNotifications([]);
+      } catch (error) {
+        console.error('Error fetching notifications:', error);
+        setNotifications([]);
+      } finally {
+        setIsLoadingNotifications(false);
+      }
+    };
+
+    fetchNotifications();
+  }, []);
+
+  const unreadCount = notifications.filter(n => !n.read).length;
 
   const handleLogout = async () => {
     await logout();
@@ -45,9 +82,11 @@ export default function AdminHeader() {
                 className="relative w-12 h-12 rounded-xl hover:bg-gray-100/50 transition-all duration-200"
               >
                 <Bell className="w-5 h-5 text-gray-600" />
-                <span className="absolute -top-1 -right-1 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-semibold shadow-lg">
-                  3
-                </span>
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-semibold shadow-lg">
+                    {unreadCount}
+                  </span>
+                )}
               </Button>
 
               {/* Notifications dropdown */}
@@ -55,45 +94,74 @@ export default function AdminHeader() {
                 <div className="absolute right-0 mt-3 w-80 bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-gray-200/50 z-50 overflow-hidden">
                   <div className="p-5 border-b border-gray-200/50 bg-gradient-to-r from-gray-50/50 to-white">
                     <h3 className="text-lg font-bold text-gray-900">Notifications</h3>
-                    <p className="text-sm text-gray-500">You have 3 new notifications</p>
+                    <p className="text-sm text-gray-500">
+                      {unreadCount > 0 
+                        ? `You have ${unreadCount} new notification${unreadCount > 1 ? 's' : ''}`
+                        : 'No new notifications'}
+                    </p>
                   </div>
                   <div className="max-h-64 overflow-y-auto">
-                    <div className="p-4 border-b border-gray-100/50 hover:bg-gradient-to-r hover:from-royal-blue/5 hover:to-blue-600/5 transition-all duration-200">
-                      <div className="flex items-start space-x-3">
-                        <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
-                        <div className="flex-1">
-                          <p className="text-sm font-semibold text-gray-900">New Application</p>
-                          <p className="text-xs text-gray-500">John Doe applied for Computer Science at MIT</p>
-                          <p className="text-xs text-gray-400 mt-1">2 hours ago</p>
-                        </div>
+                    {isLoadingNotifications ? (
+                      <div className="p-8 text-center">
+                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-royal-blue mx-auto"></div>
+                        <p className="text-xs text-gray-500 mt-2">Loading notifications...</p>
                       </div>
-                    </div>
-                    <div className="p-4 border-b border-gray-100/50 hover:bg-gradient-to-r hover:from-royal-blue/5 hover:to-blue-600/5 transition-all duration-200">
-                      <div className="flex items-start space-x-3">
-                        <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
-                        <div className="flex-1">
-                          <p className="text-sm font-semibold text-gray-900">Test Score Update</p>
-                          <p className="text-xs text-gray-500">Sarah Wilson submitted IELTS score</p>
-                          <p className="text-xs text-gray-400 mt-1">4 hours ago</p>
-                        </div>
+                    ) : notifications.length === 0 ? (
+                      <div className="p-8 text-center">
+                        <Bell className="w-8 h-8 text-gray-300 mx-auto mb-2" />
+                        <p className="text-sm text-gray-500">No notifications available</p>
                       </div>
-                    </div>
-                    <div className="p-4 hover:bg-gradient-to-r hover:from-royal-blue/5 hover:to-blue-600/5 transition-all duration-200">
-                      <div className="flex items-start space-x-3">
-                        <div className="w-2 h-2 bg-yellow-500 rounded-full mt-2"></div>
-                        <div className="flex-1">
-                          <p className="text-sm font-semibold text-gray-900">Document Upload</p>
-                          <p className="text-xs text-gray-500">Mike Johnson uploaded transcripts</p>
-                          <p className="text-xs text-gray-400 mt-1">6 hours ago</p>
-                        </div>
-                      </div>
-                    </div>
+                    ) : (
+                      notifications.map((notification) => {
+                        const getTypeColor = (type: string) => {
+                          switch (type) {
+                            case 'application':
+                              return 'bg-green-500';
+                            case 'score':
+                              return 'bg-blue-500';
+                            case 'document':
+                              return 'bg-yellow-500';
+                            default:
+                              return 'bg-gray-500';
+                          }
+                        };
+
+                        const formatTimeAgo = (dateString: string) => {
+                          const date = new Date(dateString);
+                          const now = new Date();
+                          const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+                          
+                          if (diffInSeconds < 60) return 'Just now';
+                          if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
+                          if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+                          return `${Math.floor(diffInSeconds / 86400)} days ago`;
+                        };
+
+                        return (
+                          <div
+                            key={notification.id}
+                            className={`p-4 border-b border-gray-100/50 hover:bg-gradient-to-r hover:from-royal-blue/5 hover:to-blue-600/5 transition-all duration-200 ${!notification.read ? 'bg-blue-50/30' : ''}`}
+                          >
+                            <div className="flex items-start space-x-3">
+                              <div className={`w-2 h-2 ${getTypeColor(notification.type)} rounded-full mt-2`}></div>
+                              <div className="flex-1">
+                                <p className="text-sm font-semibold text-gray-900">{notification.title}</p>
+                                <p className="text-xs text-gray-500">{notification.message}</p>
+                                <p className="text-xs text-gray-400 mt-1">{formatTimeAgo(notification.createdAt)}</p>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })
+                    )}
                   </div>
-                  <div className="p-4 border-t border-gray-200/50 bg-gradient-to-r from-gray-50/50 to-white">
-                    <Button variant="ghost" className="w-full rounded-xl hover:bg-royal-blue/10 hover:text-royal-blue transition-all duration-200">
-                      View All Notifications
-                    </Button>
-                  </div>
+                  {notifications.length > 0 && (
+                    <div className="p-4 border-t border-gray-200/50 bg-gradient-to-r from-gray-50/50 to-white">
+                      <Button variant="ghost" className="w-full rounded-xl hover:bg-royal-blue/10 hover:text-royal-blue transition-all duration-200">
+                        View All Notifications
+                      </Button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

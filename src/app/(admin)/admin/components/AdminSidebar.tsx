@@ -24,7 +24,8 @@ import {
   Home,
   TrendingUp,
   Bell,
-  Shield
+  Shield,
+  Star
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
@@ -51,6 +52,12 @@ const navigation = [
     name: 'Blog Posts',
     href: '/admin/blog',
     icon: FileText,
+    badge: null,
+  },
+  {
+    name: 'Testimonials',
+    href: '/admin/testimonials',
+    icon: Star,
     badge: null,
   },
   {

@@ -16,7 +16,7 @@ const predefinedColors = [
   '#1e40af', // Royal Blue
   '#dc2626', // Red
   '#059669', // Green
-  '#7c3aed', // Purple
+  '#0057A5', // Brand Royal Blue
   '#ea580c', // Orange
   '#0891b2', // Cyan
   '#be185d', // Pink

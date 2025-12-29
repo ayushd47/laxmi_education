@@ -147,7 +147,7 @@ export default function EnquiriesPage() {
       case 'read':
         return 'bg-yellow-100 text-yellow-800 border-yellow-200';
       case 'contacted':
-        return 'bg-purple-100 text-purple-800 border-purple-200';
+        return 'bg-royal-blue/10 text-royal-blue border-royal-blue/20';
       case 'resolved':
         return 'bg-green-100 text-green-800 border-green-200';
       default:
@@ -240,13 +240,13 @@ export default function EnquiriesPage() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-50 to-purple-100/50 border-purple-200/50">
+        <Card className="bg-gradient-to-br from-blue-50 to-royal-blue/10 border-royal-blue/20">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-semibold text-purple-900">Contacted</CardTitle>
-            <MessageSquare className="h-5 w-5 text-purple-600" />
+            <CardTitle className="text-sm font-semibold text-royal-blue">Contacted</CardTitle>
+            <MessageSquare className="h-5 w-5 text-royal-blue" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-purple-900">
+            <div className="text-3xl font-bold text-royal-blue">
               {enquiries.filter(e => e.status === 'contacted').length}
             </div>
           </CardContent>
@@ -315,7 +315,7 @@ export default function EnquiriesPage() {
                   </DropdownMenuRadioItem>
                   <DropdownMenuRadioItem value="contacted" className="cursor-pointer">
                     <div className="flex items-center gap-2.5">
-                      <MessageSquare className="w-4 h-4 text-purple-500" />
+                      <MessageSquare className="w-4 h-4 text-royal-blue" />
                       <span>Contacted</span>
                     </div>
                   </DropdownMenuRadioItem>

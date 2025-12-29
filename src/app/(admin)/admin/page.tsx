@@ -178,16 +178,16 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-50 to-purple-100/50 border-purple-200/50 hover:shadow-lg transition-all duration-300">
+        <Card className="bg-gradient-to-br from-blue-50 to-royal-blue/10 border-royal-blue/20 hover:shadow-lg transition-all duration-300">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-semibold text-purple-900">Total Views</CardTitle>
-            <div className="p-2 bg-purple-500/20 rounded-lg">
-              <Eye className="h-5 w-5 text-purple-600" />
+            <CardTitle className="text-sm font-semibold text-royal-blue">Total Views</CardTitle>
+            <div className="p-2 bg-royal-blue/20 rounded-lg">
+              <Eye className="h-5 w-5 text-royal-blue" />
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-purple-900">{stats.totalViews.toLocaleString()}</div>
-            <p className="text-sm text-purple-600 font-medium">
+            <div className="text-3xl font-bold text-royal-blue">{stats.totalViews.toLocaleString()}</div>
+            <p className="text-sm text-royal-blue font-medium">
               Across all blog posts
             </p>
           </CardContent>
@@ -364,17 +364,17 @@ export default function AdminDashboard() {
                 <div className="text-2xl font-bold text-green-700">{stats.totalCountries}</div>
               </div>
 
-              <div className="flex items-center justify-between p-4 bg-purple-50 rounded-lg">
+              <div className="flex items-center justify-between p-4 bg-royal-blue/5 rounded-lg">
                 <div className="flex items-center space-x-3">
-                  <div className="p-2 bg-purple-100 rounded-lg">
-                    <BookOpen className="h-5 w-5 text-purple-600" />
+                  <div className="p-2 bg-royal-blue/10 rounded-lg">
+                    <BookOpen className="h-5 w-5 text-royal-blue" />
                   </div>
                   <div>
-                    <p className="font-semibold text-purple-900">Programs Available</p>
-                    <p className="text-sm text-purple-600">Across all universities</p>
+                    <p className="font-semibold text-royal-blue">Programs Available</p>
+                    <p className="text-sm text-royal-blue/70">Across all universities</p>
                   </div>
                 </div>
-                <div className="text-2xl font-bold text-purple-700">500+</div>
+                <div className="text-2xl font-bold text-royal-blue">500+</div>
               </div>
             </div>
 
@@ -426,7 +426,7 @@ export default function AdminDashboard() {
               Manage Universities
             </Button>
             <Button 
-              className="w-full justify-start rounded-xl hover:bg-purple-50 hover:text-purple-700 hover:border-purple-200 transition-all duration-200" 
+              className="w-full justify-start rounded-xl hover:bg-royal-blue/5 hover:text-royal-blue hover:border-royal-blue/20 transition-all duration-200" 
               variant="outline"
               onClick={() => window.location.href = '/admin/blog'}
             >

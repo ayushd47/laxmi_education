@@ -270,7 +270,7 @@ export default function UniversitiesPage() {
         </Card>
         <Card>
           <CardContent className="p-4">
-            <div className="text-2xl font-bold text-purple-600">
+            <div className="text-2xl font-bold text-royal-blue">
               {universities.reduce((total, uni) => total + uni.programs.length, 0)}
             </div>
             <div className="text-sm text-gray-500">Total Programs</div>
@@ -385,7 +385,7 @@ export default function UniversitiesPage() {
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                         university.type === 'public' 
                           ? 'bg-blue-100 text-blue-800' 
-                          : 'bg-purple-100 text-purple-800'
+                          : 'bg-royal-blue/10 text-royal-blue'
                       }`}>
                         {university.type}
                       </span>

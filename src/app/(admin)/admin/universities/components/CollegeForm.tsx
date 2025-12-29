@@ -10,7 +10,10 @@ interface CollegeFormProps {
   college?: {
     id: string;
     name: string;
+    country: string;
+    city: string;
     type: 'public' | 'private';
+    programs: string[];
     imageUrl: string;
     website: string;
     description: string;
@@ -26,7 +29,10 @@ interface CollegeFormProps {
 export default function CollegeForm({ college, onSave, onCancel, isOpen }: CollegeFormProps) {
   const [formData, setFormData] = useState({
     name: '',
+    country: '',
+    city: '',
     type: 'public' as 'public' | 'private',
+    programs: [] as string[],
     imageUrl: '',
     website: '',
     description: '',
@@ -36,12 +42,48 @@ export default function CollegeForm({ college, onSave, onCancel, isOpen }: Colle
   });
 
   const [newKeyword, setNewKeyword] = useState('');
+  const [newProgram, setNewProgram] = useState('');
+  const [availableCountries, setAvailableCountries] = useState<string[]>([]);
+  const [availableCities, setAvailableCities] = useState<string[]>([]);
+  const [availablePrograms, setAvailablePrograms] = useState<string[]>([]);
+  const [isLoadingOptions, setIsLoadingOptions] = useState(false);
+
+  // Fetch existing universities to populate dropdowns
+  useEffect(() => {
+    const fetchOptions = async () => {
+      if (!isOpen) return;
+      
+      setIsLoadingOptions(true);
+      try {
+        const response = await fetch('/api/colleges');
+        if (response.ok) {
+          const universities = await response.json();
+          const countries = [...new Set(universities.map((u: any) => u.country).filter(Boolean))].sort() as string[];
+          const cities = [...new Set(universities.map((u: any) => u.city).filter(Boolean))].sort() as string[];
+          const programs = [...new Set(universities.flatMap((u: any) => u.programs || []).filter(Boolean))].sort() as string[];
+          
+          setAvailableCountries(countries);
+          setAvailableCities(cities);
+          setAvailablePrograms(programs);
+        }
+      } catch (error) {
+        console.error('Error fetching options:', error);
+      } finally {
+        setIsLoadingOptions(false);
+      }
+    };
+
+    fetchOptions();
+  }, [isOpen]);
 
   useEffect(() => {
     if (college) {
       setFormData({
         name: college.name || '',
+        country: college.country || '',
+        city: college.city || '',
         type: college.type || 'public',
+        programs: college.programs || [],
         imageUrl: college.imageUrl || '',
         website: college.website || '',
         description: college.description || '',
@@ -52,7 +94,10 @@ export default function CollegeForm({ college, onSave, onCancel, isOpen }: Colle
     } else {
       setFormData({
         name: '',
+        country: '',
+        city: '',
         type: 'public',
+        programs: [],
         imageUrl: '',
         website: '',
         description: '',
@@ -88,29 +133,62 @@ export default function CollegeForm({ college, onSave, onCancel, isOpen }: Colle
     }));
   };
 
+  const handleAddProgram = () => {
+    if (newProgram.trim() && !formData.programs.includes(newProgram.trim())) {
+      setFormData(prev => ({
+        ...prev,
+        programs: [...prev.programs, newProgram.trim()]
+      }));
+      setNewProgram('');
+    }
+  };
+
+  const handleRemoveProgram = (programToRemove: string) => {
+    setFormData(prev => ({
+      ...prev,
+      programs: prev.programs.filter(program => program !== programToRemove)
+    }));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate required fields
+    if (!formData.country || !formData.city) {
+      alert('Please fill in country and city fields');
+      return;
+    }
+    
+    if (formData.programs.length === 0) {
+      alert('Please add at least one program/course');
+      return;
+    }
+    
     // Add default values for required fields that are not in the form
     const collegeData = {
       ...formData,
-      country: 'India',
-      city: '',
-      ranking: 999,
-      established: new Date().getFullYear(),
-      students: 0,
-      tuitionFee: {
+      ranking: (college as any)?.ranking || 999,
+      established: (college as any)?.established || new Date().getFullYear(),
+      students: (college as any)?.students || 0,
+      tuitionFee: (college as any)?.tuitionFee || {
         undergraduate: 0,
         graduate: 0
       },
-      programs: [],
-      requirements: [],
-      applicationDeadline: new Date().toISOString().split('T')[0],
-      status: 'active',
-      // Include SEO fields
-      seoTitle: formData.seoTitle || undefined,
-      seoDescription: formData.seoDescription || undefined,
+      requirements: (college as any)?.requirements || [],
+      applicationDeadline: (college as any)?.applicationDeadline || new Date().toISOString().split('T')[0],
+      status: (college as any)?.status || 'active',
+      // Include SEO fields - send empty string if not provided, let API handle undefined
+      seoTitle: formData.seoTitle.trim() || undefined,
+      seoDescription: formData.seoDescription.trim() || undefined,
       seoKeywords: formData.seoKeywords.length > 0 ? formData.seoKeywords : undefined
     };
+    
+    console.log('Submitting college data with SEO fields:', {
+      seoTitle: collegeData.seoTitle,
+      seoDescription: collegeData.seoDescription,
+      seoKeywords: collegeData.seoKeywords
+    });
+    
     onSave(collegeData);
   };
 
@@ -143,6 +221,51 @@ export default function CollegeForm({ college, onSave, onCancel, isOpen }: Colle
               />
             </div>
 
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Country *
+                </label>
+                <Input
+                  name="country"
+                  value={formData.country}
+                  onChange={handleInputChange}
+                  placeholder="Enter or select country"
+                  list="countries-list"
+                  required
+                />
+                <datalist id="countries-list">
+                  {availableCountries.map((country) => (
+                    <option key={country} value={country} />
+                  ))}
+                </datalist>
+                {!isLoadingOptions && availableCountries.length > 0 && (
+                  <p className="text-xs text-gray-500 mt-1">Select from existing or type a new country</p>
+                )}
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  City *
+                </label>
+                <Input
+                  name="city"
+                  value={formData.city}
+                  onChange={handleInputChange}
+                  placeholder="Enter or select city"
+                  list="cities-list"
+                  required
+                />
+                <datalist id="cities-list">
+                  {availableCities.map((city) => (
+                    <option key={city} value={city} />
+                  ))}
+                </datalist>
+                {!isLoadingOptions && availableCities.length > 0 && (
+                  <p className="text-xs text-gray-500 mt-1">Select from existing or type a new city</p>
+                )}
+              </div>
+            </div>
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Type *
@@ -157,6 +280,49 @@ export default function CollegeForm({ college, onSave, onCancel, isOpen }: Colle
                 <option value="public">Public</option>
                 <option value="private">Private</option>
               </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Programs/Courses *
+              </label>
+              <div className="flex gap-2 mb-2">
+                <Input
+                  value={newProgram}
+                  onChange={(e) => setNewProgram(e.target.value)}
+                  placeholder="Add a program/course"
+                  onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddProgram())}
+                  list="programs-list"
+                />
+                <datalist id="programs-list">
+                  {availablePrograms.map((program) => (
+                    <option key={program} value={program} />
+                  ))}
+                </datalist>
+                <Button type="button" onClick={handleAddProgram} variant="outline">
+                  Add
+                </Button>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {formData.programs.map((program, index) => (
+                  <span
+                    key={index}
+                    className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-sm flex items-center gap-1"
+                  >
+                    {program}
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveProgram(program)}
+                      className="ml-1 text-blue-600 hover:text-blue-800"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                ))}
+              </div>
+              {formData.programs.length === 0 && (
+                <p className="text-xs text-red-500 mt-1">At least one program is required</p>
+              )}
             </div>
 
             <div>

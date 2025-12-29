@@ -82,10 +82,14 @@ export async function POST(request: NextRequest) {
       programs: body.programs || [],
       requirements: body.requirements || [],
       applicationDeadline: body.applicationDeadline || new Date().toISOString().split('T')[0],
-      imageUrl: body.imageUrl || '/universities/default.jpg',
+      imageUrl: body.imageUrl || '',
       website: body.website || '',
       description: body.description || '',
       status: body.status || 'active',
+      // Include SEO fields
+      seoTitle: body.seoTitle || undefined,
+      seoDescription: body.seoDescription || undefined,
+      seoKeywords: body.seoKeywords && body.seoKeywords.length > 0 ? body.seoKeywords : undefined,
     };
 
     const newCollege = await collegesDB.create(collegeData);
