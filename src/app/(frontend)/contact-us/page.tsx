@@ -148,10 +148,19 @@ export default function ContactUs() {
 
             {/* Right Side - Illustration and Form */}
             <div className="relative">
-              {/* Student Illustration Placeholder */}
-              <div className="hidden lg:block absolute -right-8 -top-8 w-64 h-64 opacity-20">
-                <div className="w-full h-full bg-royal-blue rounded-full flex items-center justify-center">
-                  <span className="text-8xl">👨‍🎓</span>
+              {/* Student Illustration */}
+              <div className="hidden lg:block absolute -right-12 -top-12 w-96 h-96 z-0">
+                <div className="relative w-full h-full">
+                  <img
+                    src="/assets/images/blog_banner.png"
+                    alt="Students illustration"
+                    className="w-full h-full object-contain opacity-30"
+                    onError={(e) => {
+                      // Hide image on error
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                    }}
+                  />
                 </div>
               </div>
 
@@ -238,11 +247,11 @@ export default function ContactUs() {
         </div>
       </section>
 
-      {/* Latest & Fresntact Methodods Section */}
+      {/* Contact Methods Section */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl md:text-4xl font-bold text-royal-blue mb-8 text-center">
-            Latest & Fresntact Methodods
+            Contact Methods
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

@@ -189,15 +189,10 @@ export default function Home() {
             {/* Right side - Banner image */}
             <div className="relative h-full flex items-center justify-center">
               <div className="relative z-10 w-full">
-                <Image
-                  src="/assets/images/home_banner.webp.png"
+                <img
+                  src="/assets/images/home_banner.webp"
                   alt="Students studying abroad - International education journey"
-                  width={600}
-                  height={600}
                   className="w-full h-auto object-contain rounded-lg"
-                  priority
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
-                  quality={90}
                 />
               </div>
             </div>
