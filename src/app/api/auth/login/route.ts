@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { generateToken, createAuthResponse } from '@/lib/auth';
 import { findAdminByEmail, verifyPassword } from '@/lib/admin-users';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
     const { email, password } = await request.json();
