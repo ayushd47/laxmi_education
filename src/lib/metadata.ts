@@ -18,6 +18,11 @@ export function getBaseUrl(): string {
     return `https://${process.env.VERCEL_URL}`;
   }
   
+  // During build time, return a safe fallback
+  if (typeof window === 'undefined' && !process.env.VERCEL && !process.env.NEXT_PUBLIC_BASE_URL) {
+    return 'https://laxmieducation.com';
+  }
+  
   // Final fallback
   return 'https://laxmieducation.com';
 }
@@ -29,6 +34,7 @@ export function getUrl(path: string): string {
   const baseUrl = getBaseUrl();
   return `${baseUrl}${path.startsWith('/') ? path : `/${path}`}`;
 }
+
 
 
 
