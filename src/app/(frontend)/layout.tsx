@@ -13,7 +13,16 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-const baseUrl = getBaseUrl();
+// Get base URL safely, with fallback for build time
+function getSafeBaseUrl(): string {
+  try {
+    return getBaseUrl();
+  } catch {
+    return 'https://laxmieducation.com';
+  }
+}
+
+const baseUrl = getSafeBaseUrl();
 
 export const metadata: Metadata = {
   title: "Laxmi Education - Your Gateway to International Education",
