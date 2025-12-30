@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getTokenFromRequest, verifyToken } from '@/lib/auth';
 import { University, CreateUniversityData } from '@/lib/types';
 
+// Force dynamic rendering - POST uses request headers for auth
+export const dynamic = 'force-dynamic';
+
 // Mock database - in production, this would be a real database
 let universities: University[] = [];
 

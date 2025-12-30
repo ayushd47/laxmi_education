@@ -1,11 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getTokenFromRequest, verifyToken } from '@/lib/auth';
+import { verifyToken } from '@/lib/auth';
 
+// Force dynamic rendering - this route uses request headers
 export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+export const revalidate = 0;
 
 export async function GET(request: NextRequest) {
   try {
-    const token = getTokenFromRequest(request);
+    // Access headers directly in the handler to avoid static analysis issues
+    const authHeader = request.headers.get('authorization');
+    let token: string | null = null;
+    
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      token = authHeader.substring(7);
+    } else {
+      // Also check cookies
+      const cookieToken = request.cookies.get('admin-token')?.value;
+      token = cookieToken || null;
+    }
     
     if (!token) {
       return NextResponse.json(
