@@ -1,23 +1,11 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { getBaseUrl } from "@/lib/metadata";
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
 });
-
-// Get base URL safely, with fallback for build time
-function getSafeBaseUrl(): string {
-  try {
-    return getBaseUrl();
-  } catch {
-    return 'https://laxmieducation.com';
-  }
-}
-
-const baseUrl = getSafeBaseUrl();
 
 export const metadata: Metadata = {
   title: "Laxmi Education - Your Gateway to International Education",
@@ -31,18 +19,23 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL(baseUrl),
+  metadataBase: new URL('https://laxmieducation.com'),
   alternates: {
     canonical: '/',
+  },
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/assets/logo.png',
   },
   openGraph: {
     title: "Laxmi Education - Your Gateway to International Education",
     description: "Expert guidance for study abroad programs, test preparation, and university applications.",
-    url: baseUrl,
+    url: 'https://laxmieducation.com',
     siteName: 'Laxmi Education',
     images: [
       {
-        url: '/assets/logo.png', // Using logo as fallback until og-image.jpg is created
+        url: '/assets/og-image.jpg',
         width: 1200,
         height: 630,
         alt: 'Laxmi Education - International Education Services',
@@ -55,7 +48,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: "Laxmi Education - Your Gateway to International Education",
     description: "Expert guidance for study abroad programs, test preparation, and university applications.",
-    images: ['/assets/logo.png'], // Using logo as fallback until og-image.jpg is created
+    images: ['/assets/og-image.jpg'],
   },
   robots: {
     index: true,
@@ -86,8 +79,8 @@ export default function RootLayout({
               "@type": "EducationalOrganization",
               "name": "Laxmi Education",
               "description": "Expert guidance for study abroad programs, test preparation, and university applications",
-              "url": baseUrl,
-              "logo": `${baseUrl}/assets/logo.png`,
+              "url": "https://laxmieducation.com",
+              "logo": "https://laxmieducation.com/assets/logo.png",
               "contactPoint": {
                 "@type": "ContactPoint",
                 "telephone": "+977-1-5333088",
@@ -134,13 +127,13 @@ export default function RootLayout({
               "provider": {
                 "@type": "EducationalOrganization",
                 "name": "Laxmi Education",
-                "url": baseUrl
+                "url": "https://laxmieducation.com"
               },
-              "serviceType": "EducationalConsulting",
+              "serviceType": "Educational Consulting",
               "areaServed": "Nepal",
               "availableChannel": {
                 "@type": "ServiceChannel",
-                "serviceUrl": baseUrl,
+                "serviceUrl": "https://laxmieducation.com",
                 "serviceSmsNumber": "+977-1-5333088",
                 "servicePhone": "+977-1-5333088"
               },
