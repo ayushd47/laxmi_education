@@ -76,10 +76,10 @@ export default function FrontendLayout({
       {/* Top Contact Bar */}
       <div className="bg-royal-blue text-white text-sm py-2 relative z-[60]" style={{color: 'white'}}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center">
-          {/* Left side - Kathmandu Contact */}
+          {/* Left side - Contact */}
           <div className="flex items-center mb-1 sm:mb-0" style={{color: 'white'}}>
             <span className="mr-2" style={{color: 'white'}}>📞</span>
-            <span style={{color: 'white'}}>Contact No: Kathmandu 9823727770</span>
+            <span style={{color: 'white'}}>Contact No: 9823727770</span>
           </div>
           {/* Right side - Jhapa Contact & Email */}
           <div className="flex items-center space-x-4">
@@ -89,7 +89,7 @@ export default function FrontendLayout({
             </span>
             <span className="flex items-center" style={{color: 'white'}}>
               <span className="mr-2" style={{color: 'white'}}>✉️</span>
-              <span style={{color: 'white'}}>collegeadmissionnp@gmail.com</span>
+              <span style={{color: 'white'}}>laxmieducationconsultancy1@gmail.com</span>
             </span>
           </div>
         </div>

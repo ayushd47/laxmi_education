@@ -15,6 +15,9 @@ interface BlogPost {
 export default function ContactUs() {
   const [formData, setFormData] = useState({
     fullName: '',
+    email: '',
+    phone: '',
+    phoneCountryCode: '+977',
     courseLevel: '',
     cityUniversity: '',
     message: ''
@@ -64,21 +67,25 @@ export default function ContactUs() {
         },
         body: JSON.stringify({
           name: formData.fullName,
-          email: '',
-          phone: '',
-          phoneCountryCode: '+977',
+          email: formData.email,
+          phone: formData.phone,
+          phoneCountryCode: formData.phoneCountryCode,
           nearestOffice: 'Kathmandu',
           message: formData.message
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to submit enquiry');
+        const errorData = await response.json().catch(() => ({ error: 'Failed to submit enquiry' }));
+        throw new Error(errorData.error || 'Failed to submit enquiry');
       }
 
       // Reset form
       setFormData({
         fullName: '',
+        email: '',
+        phone: '',
+        phoneCountryCode: '+977',
         courseLevel: '',
         cityUniversity: '',
         message: ''
@@ -184,6 +191,52 @@ export default function ContactUs() {
                   </div>
 
                   <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-royal-blue focus:border-transparent"
+                      placeholder="Enter your email"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                      Phone Number
+                    </label>
+                    <div className="flex">
+                      <select
+                        name="phoneCountryCode"
+                        value={formData.phoneCountryCode}
+                        onChange={handleInputChange}
+                        className="px-4 py-3 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-royal-blue focus:border-transparent bg-white"
+                      >
+                        <option value="+977">🇳🇵 +977</option>
+                        <option value="+1">🇺🇸 +1</option>
+                        <option value="+44">🇬🇧 +44</option>
+                        <option value="+61">🇦🇺 +61</option>
+                        <option value="+91">🇮🇳 +91</option>
+                        <option value="+86">🇨🇳 +86</option>
+                      </select>
+                      <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        className="flex-1 px-4 py-3 border border-gray-300 rounded-r-lg focus:ring-2 focus:ring-royal-blue focus:border-transparent"
+                        placeholder="Enter phone number"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
                     <label htmlFor="courseLevel" className="block text-sm font-medium text-gray-700 mb-2">
                       Preferred Course Level
                     </label>
@@ -248,76 +301,84 @@ export default function ContactUs() {
       </section>
 
       {/* Contact Methods Section */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-royal-blue mb-8 text-center">
-            Contact Methods
-          </h2>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-royal-blue mb-4">
+              Contact Methods
+            </h2>
+            <p className="text-gray-600 text-lg">Get in touch with us through any of these methods</p>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            {/* Location Card */}
-            <div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-              <div className="h-48 bg-gray-100 flex items-center justify-center">
-                <div className="text-center">
-                  <div className="relative inline-block mb-3">
-                    {/* Location Pin with Target */}
-                    <svg className="w-20 h-20 text-royal-blue" viewBox="0 0 24 24" fill="none">
-                      {/* Outer location pin */}
-                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="currentColor"/>
-                      {/* Target circles inside */}
-                      <circle cx="12" cy="9" r="6" stroke="white" strokeWidth="1.5" fill="none"/>
-                      <circle cx="12" cy="9" r="3.5" stroke="white" strokeWidth="1.5" fill="none"/>
-                      <circle cx="12" cy="9" r="1.5" fill="white"/>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            {/* Location Card with Map - Takes 2 columns */}
+            <div className="lg:col-span-2 bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
+              <div className="h-80 w-full relative">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3560.1234567890123!2d87.9876543210987!3d26.6543210987654!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjbCsDM5JzE1LjYiTiA4N8KwNTknMTUuNiJF!5e0!3m2!1sen!2snp!4v1234567890123!5m2!1sen!2snp"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="w-full h-full"
+                  title="Laxmi Education Location Map"
+                ></iframe>
+              </div>
+            </div>
+
+            {/* Contact Info Card - Combined Phone, Address, Email */}
+            <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
+              <div className="space-y-6">
+                {/* Phone */}
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 bg-royal-blue rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                     </svg>
                   </div>
-                  <p className="text-sm text-gray-700 font-medium">Kakarvitta, Jhapa, Nepal</p>
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900 mb-1 text-sm">Phone</h3>
+                    <a href="tel:9823727770" className="block text-gray-600 hover:text-royal-blue transition-colors text-sm">
+                      9823727770
+                    </a>
+                    <a href="tel:9804904835" className="block text-gray-600 hover:text-royal-blue transition-colors text-sm">
+                      Jhapa: 9804904835
+                    </a>
+                  </div>
                 </div>
-              </div>
-            </div>
 
-            {/* Phone Card */}
-            <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-royal-blue rounded-full flex items-center justify-center flex-shrink-0">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                  </svg>
+                {/* Address */}
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 bg-royal-blue rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900 mb-1 text-sm">Address</h3>
+                    <p className="text-gray-600 text-sm">Kakarvitta, Jhapa</p>
+                    <p className="text-gray-600 text-sm">Nepal</p>
+                  </div>
                 </div>
-                <div className="flex-1">
-                  <h3 className="font-bold text-gray-900 mb-2 text-lg">Phone</h3>
-                  <p className="text-gray-600 text-sm mb-1">Kathmandu: 9823727770</p>
-                  <p className="text-gray-600 text-sm">Jhapa: 9804904835</p>
-                </div>
-              </div>
-            </div>
 
-            {/* Email Card */}
-            <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-royal-blue rounded-full flex items-center justify-center flex-shrink-0">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-bold text-gray-900 mb-2 text-lg">Email</h3>
-                  <p className="text-gray-600 text-sm">collegeadmissionnp@gmail.com</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Office Card */}
-            <div className="bg-white rounded-lg shadow-md p-6 border border-gray-200">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-royal-blue rounded-full flex items-center justify-center flex-shrink-0">
-                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                  </svg>
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-bold text-gray-900 mb-2 text-lg">Office</h3>
-                  <p className="text-gray-600 text-sm mb-1">Kakarvitta, Jhapa</p>
-                  <p className="text-gray-600 text-sm">Nepal</p>
+                {/* Email */}
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 bg-royal-blue rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900 mb-1 text-sm">Email</h3>
+                    <a 
+                      href="mailto:laxmieducationconsultancy1@gmail.com" 
+                      className="text-gray-600 hover:text-royal-blue transition-colors text-sm break-words"
+                    >
+                      laxmieducationconsultancy1@gmail.com
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>

@@ -117,49 +117,51 @@ export default function Home() {
                   <span className="text-royal-blue">Starts Here</span>
                 </h1>
                 <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
-                  Expert guidance for admissions, visa, scholarships & more
+                  Discover the best educational opportunities for your future
                 </p>
               </div>
               
               {/* Search Form */}
               <form onSubmit={handleFormSubmit} className="space-y-4 pt-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {/* Course Selection */}
                   <div className="relative">
-                    <input
-                      type="text"
-                      placeholder="Course"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-royal-blue focus:border-transparent bg-white text-gray-700 text-sm md:text-base"
+                    <select
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-royal-blue focus:border-transparent appearance-none bg-white text-gray-700 text-sm md:text-base"
                       value={selectedCourse}
                       onChange={(e) => setSelectedCourse(e.target.value)}
-                    />
+                    >
+                      <option value="">Select Course</option>
+                      {uniquePrograms.map((program) => (
+                        <option key={program} value={program}>
+                          {program}
+                        </option>
+                      ))}
+                    </select>
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </div>
                   </div>
 
                   {/* City Selection */}
                   <div className="relative">
-                    <input
-                      type="text"
-                      placeholder="Destination City"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-royal-blue focus:border-transparent bg-white text-gray-700 text-sm md:text-base"
+                    <select
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-royal-blue focus:border-transparent appearance-none bg-white text-gray-700 text-sm md:text-base"
                       value={selectedCity}
                       onChange={(e) => setSelectedCity(e.target.value)}
-                    />
-                  </div>
-
-                  {/* Level Selection */}
-                  <div className="relative">
-                    <select 
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-royal-blue focus:border-transparent appearance-none bg-white text-gray-700 text-sm md:text-base"
-                      value={selectedLevel}
-                      onChange={(e) => setSelectedLevel(e.target.value)}
                     >
-                      <option value="">Level (UG/PG)</option>
-                      <option value="UG">Undergraduate</option>
-                      <option value="PG">Postgraduate</option>
+                      <option value="">Select City</option>
+                      {uniqueCities.map((city) => (
+                        <option key={city} value={city}>
+                          {city}
+                        </option>
+                      ))}
                     </select>
                     <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                       <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                       </svg>
                     </div>
                   </div>
